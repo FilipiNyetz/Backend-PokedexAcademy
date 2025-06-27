@@ -4,6 +4,12 @@ import routes from './routes/index.js';
 const app = express();
 
 app.use(express.json());
+
+// Rota raiz para health check
+app.get('/', (req, res) => {
+  res.status(200).send('API Pokedex rodando!');
+});
+
 app.use('/api', routes);
 
 export default app;
