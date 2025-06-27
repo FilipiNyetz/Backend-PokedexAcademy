@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  idUser         String   @id @default(uuid()) // melhor usar @id aqui
+  userName       String
+  kit            Int      @unique
+  course         String?
+  period         Int?
+  birthday       DateTime
+  hackaton       Boolean?
+  avaliableWork  Boolean?
+  profilePicture String?
+  apps           String[]
+
+  idPosition String
+  position   Position @relation(fields: [idPosition], references: [idPosition])
+
+  // N:N com Skill
+  skills UserSkill[]
+
+  // N:N com Group
+  groups UserGroup[]
+}
+
+model Position {
+  idPosition   String @id @default(uuid())
+  namePosition String @unique
+  users        User[]
+}
+
+model Skill {
+  idSkill    String      @id @default(uuid())
+  nameSkill  String      @unique
+  userSkills UserSkill[]
+}
+
+model UserSkill {
+  id      String @id @default(uuid())
+  userId  String
+  skillId String
+
+  user  User  @relation(fields: [userId], references: [idUser])
+  skill Skill @relation(fields: [skillId], references: [idSkill])
+
+  @@unique([userId, skillId]) // evita duplicações
+}
+
+model Group {
+  idGroup    String      @id @default(uuid())
+  nameGroup  String      @unique
+  userGroups UserGroup[]
+}
+
+model UserGroup {
+  id      String @id @default(uuid())
+  userId  String
+  groupId String
+
+  user  User  @relation(fields: [userId], references: [idUser])
+  group Group @relation(fields: [groupId], references: [idGroup])
+
+  @@unique([userId, groupId]) // evita duplicações
+}
+
+// model App {
+//   idApp   String @unique @default(uuid())
+//   link    String @unique
+//   name    String @unique
+//   iconApp String
+// }
