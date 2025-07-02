@@ -6,9 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prisma:migration": "npx prisma migrate dev --name init",
-    "start": "npm run prisma:migration && node src/server.js",
+    "start": "node src/server.js",
+    "migrate": "npm run prisma:migration",
     "dev": "node --watch src/server.js"
   },
+
   "prisma": {
     "schema": "src/prisma/schema.prisma"
   },
