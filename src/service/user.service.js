@@ -25,34 +25,50 @@ export async function listAllUsers() {
 
 
 
-export async function createUser({ userName, kit, course, period, birthday, hackaton, avaliableWork, profilePicture, apps, idPosition }) {
-    try {
-        const userExist = await prisma.user.findUnique({
-            where: { kit }
-        })
-        if (userExist) throw new Error("Usuário já cadastrado")
+export async function createUser({
+  userName,
+  kit,
+  course,
+  period,
+  birthday,
+  hackaton,
+  avaliableWork,
+  profilePicture,
+  apps,
+  idPosition,
+}) {
+  try {
+    const userExist = await prisma.user.findUnique({
+      where: { kit },
+    });
+    if (userExist) throw new Error("Usuário já cadastrado");
 
-        const userCreated = await prisma.user.create({
-            data: {
-                userName,
-                kit,
-                course,
-                period,
-                birthday,
-                hackaton,
-                avaliableWork,
-                profilePicture,
-                apps,
-                idPosition
-            }
-        });
+    const formattedBirthday = birthday
+      ? new Date(birthday).toISOString().split(".")[0] + "Z"
+      : null;
 
-        return userCreated
-    } catch (error) {
-        console.error("Erro ao criar usuario", error.message);
-        throw error;
-    }
+    const userCreated = await prisma.user.create({
+      data: {
+        userName,
+        kit,
+        course,
+        period,
+        birthday: formattedBirthday, // 👈 aqui usamos o novo valor
+        hackaton,
+        avaliableWork,
+        profilePicture,
+        apps,
+        idPosition,
+      },
+    });
+
+    return userCreated;
+  } catch (error) {
+    console.error("Erro ao criar usuario", error.message);
+    throw error;
+  }
 }
+
 
 export async function editUser({ idUser, userName, kit, course, period, birthday, hackaton, avaliableWork, profilePicture, apps, idPosition }) {
     try {
