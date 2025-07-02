@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prisma:migration": "npx prisma migrate dev --name init",
+    "migrate": "npx prisma migrate deploy",
     "start": "node src/server.js",
-    "migrate": "npm run prisma:migration",
     "dev": "node --watch src/server.js"
   },
 
