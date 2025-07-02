@@ -1,29 +1,35 @@
 import prisma from '../prisma/client.js'
 
 export async function listAllUsers() {
-    try {
-        const usersExist = await prisma.user.findMany({
-            include: {
-                position: true
-            },
-            orderBy: {
-                kit: 'asc'
-            }
-        });
+  try {
+    const usersExist = await prisma.user.findMany({
+      include: {
+        position: true
+      },
+      orderBy: {
+        kit: 'asc'
+      }
+    });
 
-        if (!usersExist) {
-            throw new Error("Não existe nenhum usuário");
-        }
-
-        return usersExist;
-
-    } catch (error) {
-        console.error("Erro ao buscar usuários", error.message);
-        throw error;
+    if (!usersExist) {
+      throw new Error("Não existe nenhum usuário");
     }
+
+    // ✅ Formata os birthdays para o formato ISO 8601 sem milissegundos
+    const usersFormatted = usersExist.map(user => ({
+      ...user,
+      birthday: user.birthday
+        ? user.birthday.toISOString().split(".")[0] + "Z"
+        : null
+    }));
+
+    return usersFormatted;
+
+  } catch (error) {
+    console.error("Erro ao buscar usuários", error.message);
+    throw error;
+  }
 }
-
-
 
 export async function createUser({
   userName,
