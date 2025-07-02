@@ -18,12 +18,14 @@ const upload = multer({ storage });
 
 // Rota de upload
 router.post('/', upload.single('file'), (req, res) => {
+    console.log('Arquivo enviado:', JSON.stringify(req.file, null, 2));
+
     if (!req.file || !req.file.path) {
         return res.status(400).json({ error: 'Falha ao enviar o arquivo.' });
     }
 
-    const fileUrl = req.file.path; // URL final da imagem no Cloudinary
-    return res.status(200).json({ url: fileUrl });
+    return res.status(200).json({ url: req.file.path });
 });
+
 
 export default router;
