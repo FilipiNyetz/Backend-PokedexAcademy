@@ -18,13 +18,15 @@ const upload = multer({ storage });
 
 // Rota de upload
 router.post('/', upload.single('file'), (req, res) => {
-    console.log('Arquivo enviado:', JSON.stringify(req.file, null, 2));
-
-    if (!req.file || !req.file.path) {
-        return res.status(400).json({ error: 'Falha ao enviar o arquivo.' });
+    try {
+        if (!req.file || !req.file.path) {
+            return res.status(400).json({ error: 'Falha ao enviar o arquivo.' });
+        }
+        return res.status(200).json({ url: req.file.path });
+    } catch (err) {
+        console.error('Erro no upload:', JSON.stringify(err, Object.getOwnPropertyNames(err), 2));
+        res.status(500).json({ error: 'Erro interno no servidor.' });
     }
-
-    return res.status(200).json({ url: req.file.path });
 });
 
 
