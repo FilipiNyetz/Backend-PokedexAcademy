@@ -12,7 +12,9 @@ export async function getUsers(req, res) {
 
 export async function postUser(req, res) {
     try {
-        const { userName, kit, course, period, birthday, hackaton, avaliableWork, profilePicture, apps, idPosition } = req.body
+        const { userName, kit, course, period, birthday, hackaton, avaliableWork, apps, idPosition } = req.body
+
+        const profilePicture = req.file ? req.file.buffer : null;
 
         if (!userName || !kit || !birthday) {
             return res.status(400).json({ message: 'Parâmetros ausentes' });
