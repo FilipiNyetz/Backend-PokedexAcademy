@@ -10,8 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Caminho absoluto da pasta uploads (dentro de src/)
-const uploadsPath = path.join(__dirname, '../uploads');
-
+const uploadsPath = path.join(__dirname, '../../uploads');
 // Configuração do Multer
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
