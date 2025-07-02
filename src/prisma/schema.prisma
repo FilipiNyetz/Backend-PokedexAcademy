@@ -22,7 +22,7 @@ model User {
   birthday       DateTime
   hackaton       Boolean?
   avaliableWork  Boolean?
-  profilePicture Bytes?
+  profilePicture String?
   apps           String[]
 
   idPosition String
