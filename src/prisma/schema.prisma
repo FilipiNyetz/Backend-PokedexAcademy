@@ -13,8 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
+
 model User {
-  idUser         String   @id @default(uuid()) // melhor usar @id aqui
+  idUser         String   @id @default(uuid()) 
   userName       String
   kit            Int      @unique
   course         String?
@@ -28,10 +31,9 @@ model User {
   idPosition String
   position   Position @relation(fields: [idPosition], references: [idPosition])
 
-  // N:N com Skill
   skills UserSkill[]
 
-  // N:N com Group
+  
   groups UserGroup[]
 }
 
@@ -39,6 +41,24 @@ model Position {
   idPosition   String @id @default(uuid())
   namePosition String @unique
   users        User[]
+}
+
+
+model Group {
+  idGroup    String      @id @default(uuid())
+  nameGroup  String      @unique
+  userGroups UserGroup[]
+}
+
+model UserGroup {
+  id      String @id @default(uuid())
+  userId  String
+  groupId String
+
+  user  User  @relation(fields: [userId], references: [idUser])
+  group Group @relation(fields: [groupId], references: [idGroup])
+
+  @@unique([userId, groupId])
 }
 
 model Skill {
@@ -55,24 +75,7 @@ model UserSkill {
   user  User  @relation(fields: [userId], references: [idUser])
   skill Skill @relation(fields: [skillId], references: [idSkill])
 
-  @@unique([userId, skillId]) // evita duplicações
-}
-
-model Group {
-  idGroup    String      @id @default(uuid())
-  nameGroup  String      @unique
-  userGroups UserGroup[]
-}
-
-model UserGroup {
-  id      String @id @default(uuid())
-  userId  String
-  groupId String
-
-  user  User  @relation(fields: [userId], references: [idUser])
-  group Group @relation(fields: [groupId], references: [idGroup])
-
-  @@unique([userId, groupId]) // evita duplicações
+  @@unique([userId, skillId]) 
 }
 
 // model App {
